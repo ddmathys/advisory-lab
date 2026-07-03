@@ -1,65 +1,129 @@
-import Image from "next/image";
+import Link from "next/link";
+import {
+  ArrowRight,
+  Briefcase,
+  Cpu,
+  Database,
+  FileText,
+  LineChart,
+  PieChart,
+  Search,
+  ShieldCheck,
+} from "lucide-react";
+
+// Page d'accueil — présente le parcours et la stack IA (support de cours HEG)
+
+const STEPS = [
+  {
+    href: "/portfolio",
+    icon: Briefcase,
+    title: "1 · Portefeuille client",
+    text: "Importez un relevé PDF (extraction par IA) ou chargez le portefeuille de démonstration, puis saisissez le profil d'investisseur.",
+  },
+  {
+    href: "/portfolio/analyse",
+    icon: PieChart,
+    title: "2 · Analyse des avoirs",
+    text: "Un agent « spécialiste en investissement » analyse concentration, risques et adéquation au profil, avec visualisations.",
+  },
+  {
+    href: "/assets",
+    icon: Search,
+    title: "3 · Recherche d'assets",
+    text: "Recherchez un titre via EODHD, consultez cours, fondamentaux et lancez l'analyse top-down avec consensus des analystes.",
+  },
+  {
+    href: "/simulation",
+    icon: LineChart,
+    title: "4 · Portefeuille simulé",
+    text: "Construisez une allocation cible et comparez-la au portefeuille actuel du client.",
+  },
+];
+
+const STACK = [
+  {
+    icon: Cpu,
+    title: "DeepSeek (LLM)",
+    text: "Trois agents spécialisés : extraction de PDF, spécialiste investissement, analyste top-down. Appelé uniquement côté serveur.",
+  },
+  {
+    icon: Database,
+    title: "EODHD (données marché)",
+    text: "Recherche d'instruments, cotations, historiques, fondamentaux et consensus analystes. Clé API protégée côté serveur.",
+  },
+  {
+    icon: FileText,
+    title: "Panneau « Sous le capot »",
+    text: "Chaque analyse expose son prompt, le modèle, les tokens consommés et les sources de données : l'IA sans boîte noire.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Bonnes pratiques",
+    text: "Aucune clé API dans le navigateur, données client stockées localement, l'IA reçoit des chiffres calculés — elle ne les invente pas.",
+  },
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="space-y-12">
+      <section className="pt-8 text-center">
+        <p className="text-sage text-sm font-medium tracking-wide uppercase mb-3">
+          Démonstration pédagogique — HEG
+        </p>
+        <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-fg-0">
+          L&apos;IA au service du<br className="hidden sm:block" /> conseiller financier
+        </h1>
+        <p className="mt-4 max-w-2xl mx-auto text-fg-2">
+          Un outil opérationnel qui combine un LLM (DeepSeek) et des données de marché
+          (EODHD) pour analyser un portefeuille client, évaluer une société et simuler
+          une allocation — en montrant à chaque étape comment l&apos;IA travaille.
+        </p>
+        <div className="mt-8">
+          <Link
+            href="/portfolio"
+            className="inline-flex items-center gap-2 bg-sage text-ink-0 font-medium px-5 py-2.5 rounded-lg hover:bg-sage-bright transition-colors"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            Commencer avec un portefeuille
+            <ArrowRight className="w-4 h-4" aria-hidden />
+          </Link>
         </div>
-      </main>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-medium text-fg-1 mb-4">Le parcours conseiller</h2>
+        <div className="grid sm:grid-cols-2 gap-4">
+          {STEPS.map(({ href, icon: Icon, title, text }) => (
+            <Link
+              key={href}
+              href={href}
+              className="group bg-ink-2 border border-ink-3 rounded-xl p-5 hover:border-sage-dim transition-colors"
+            >
+              <Icon className="w-6 h-6 text-sage mb-3" aria-hidden />
+              <h3 className="font-medium text-fg-0 group-hover:text-sage-bright transition-colors">
+                {title}
+              </h3>
+              <p className="mt-1.5 text-sm text-fg-2">{text}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-medium text-fg-1 mb-4">
+          Sous le capot : les outils utilisés
+        </h2>
+        <div className="grid sm:grid-cols-2 gap-4">
+          {STACK.map(({ icon: Icon, title, text }) => (
+            <div key={title} className="bg-ink-1 border border-ink-3 rounded-xl p-5">
+              <div className="flex items-center gap-2 mb-2">
+                <Icon className="w-5 h-5 text-fg-2" aria-hidden />
+                <h3 className="font-medium text-fg-0">{title}</h3>
+              </div>
+              <p className="text-sm text-fg-2">{text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

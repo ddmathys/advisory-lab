@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Advisory Lab
 
-## Getting Started
+Outil de démonstration pédagogique (HEG) : **l'IA au service du conseiller financier**.
+Analyse de portefeuille client, analyse top-down de sociétés et portefeuille simulé,
+avec à chaque étape un panneau « Sous le capot » qui expose les prompts, le modèle,
+les tokens et les sources de données.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router, TypeScript, Tailwind CSS 4) — déployable sur Vercel
+- **DeepSeek** (`deepseek-chat`, JSON mode) — trois agents : extraction PDF,
+  spécialiste investissement, analyste top-down
+- **EODHD** — recherche d'instruments, cotations, historiques (+ fondamentaux si plan supérieur)
+- **Finnhub** — repli gratuit pour fondamentaux + consensus analystes (titres US)
+- **Recharts** — visualisations (palette validée accessibilité/CVD)
+- **unpdf** — extraction de texte des relevés PDF côté serveur
+
+Toutes les clés API restent **côté serveur** (routes API) — rien dans le navigateur.
+Les données client (portefeuille, profil) restent dans le `localStorage` du navigateur.
+
+## Parcours
+
+1. `/portfolio` — import d'un relevé PDF (extraction IA) ou portefeuille de démo + profil d'investisseur
+2. `/portfolio/analyse` — graphiques calculés localement + analyse IA (concentration, risques, adéquation au profil)
+3. `/assets` → `/assets/[ticker]` — recherche EODHD, fiche instrument, consensus analystes, note top-down IA
+4. `/simulation` — allocation cible comparée au portefeuille actuel
+
+## Démarrage
 
 ```bash
+cp .env.local.example .env.local   # puis renseigner les clés
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Un relevé PDF d'exemple est disponible : `public/releve-demo.pdf`
+(régénérable via `node scripts/make-demo-pdf.mjs`).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Cascade de données fondamentales
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Source | Condition | Contenu |
+|---|---|---|
+| EODHD `/fundamentals` | plan payant « Fundamentals » | complet + consensus |
+| Finnhub (gratuit) | titres US uniquement | métriques + consensus |
+| Cours + historique seul | toujours | l'agent IA signale la limite |
 
-## Learn More
+## Déploiement Vercel
 
-To learn more about Next.js, take a look at the following resources:
+Ajouter `DEEPSEEK_API_KEY`, `EOD_API_KEY` et `FINNHUB_API_KEY` dans les
+variables d'environnement du projet Vercel, puis `vercel deploy`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+⚠️ Outil de démonstration : ne constitue pas un conseil en investissement.
